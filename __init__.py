@@ -10,7 +10,7 @@ md_version = "2.0"
 md_name = "Python Eval"
 md_description = "Evaluate Python code"
 md_license = "BSD-3"
-md_url = "https://github.com/albertlauncher/python/tree/main/python_eval"
+md_url = "https://github.com/albertlauncher/albert-plugin-python-python-eval"
 md_authors = "@manuelschneid3r"
 
 
