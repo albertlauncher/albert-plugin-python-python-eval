@@ -6,13 +6,13 @@ from pathlib import Path
 from albert import *
 
 md_iid = "3.0"
-md_version = "2.0"
+md_version = "2.1"
 md_name = "Python Eval"
 md_description = "Evaluate Python code"
 md_license = "BSD-3"
 md_url = "https://github.com/albertlauncher/albert-plugin-python-python-eval"
-md_authors = "@manuelschneid3r"
-md_maintainers = ["@manuelschneid3r"]
+md_authors = ["@ManuelSchneid3r"]
+md_maintainers = ["@ManuelSchneid3r"]
 
 
 class Plugin(PluginInstance, TriggerQueryHandler):
