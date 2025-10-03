@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2017-2014 Manuel Schneider
 
+import math
 from pathlib import Path
 
 from albert import *
 
 md_iid = "3.0"
-md_version = "2.1"
+md_version = "2.2"
 md_name = "Python Eval"
 md_description = "Evaluate Python code"
 md_license = "BSD-3"
@@ -16,6 +17,7 @@ md_maintainers = ["@ManuelSchneid3r"]
 
 
 class Plugin(PluginInstance, TriggerQueryHandler):
+    eval_globals = {**vars(math), "pow": pow}
 
     def __init__(self):
         PluginInstance.__init__(self)
@@ -32,7 +34,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         stripped = query.string.strip()
         if stripped:
             try:
-                result = eval(stripped)
+                result = eval(stripped, self.eval_globals)
             except Exception as ex:
                 result = ex
 
@@ -46,6 +48,6 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 iconUrls=self.iconUrls,
                 actions = [
                     Action("copy", "Copy result to clipboard", lambda r=result_str: setClipboardText(r)),
-                    Action("exec", "Execute python code", lambda r=result_str: exec(stripped)),
+                    Action("exec", "Execute python code", lambda r=result_str: exec(stripped, self.eval_globals)),
                 ]
             ))
