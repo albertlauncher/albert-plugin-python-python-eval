@@ -5,7 +5,7 @@ from pathlib import Path
 
 from albert import *
 
-md_iid = "3.0"
+md_iid = "4.0"
 md_version = "2.1"
 md_name = "Python Eval"
 md_description = "Evaluate Python code"
@@ -17,10 +17,11 @@ md_maintainers = ["@ManuelSchneid3r"]
 
 class Plugin(PluginInstance, TriggerQueryHandler):
 
+    icon = Path(__file__).parent / "python.svg"
+
     def __init__(self):
         PluginInstance.__init__(self)
         TriggerQueryHandler.__init__(self)
-        self.iconUrls = [f"file:{Path(__file__).parent}/python.svg"]
 
         self._modules = self.readConfig('modules', str)
         if self._modules:
@@ -75,7 +76,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 text=result_str,
                 subtext=type(result).__name__,
                 inputActionText=query.trigger + result_str,
-                iconUrls=self.iconUrls,
+                iconFactory=lambda: makeImageIcon(Plugin.icon),
                 actions = [
                     Action("copy", "Copy result to clipboard", lambda r=result_str: setClipboardText(r)),
                     Action("exec", "Execute python code", lambda r=result_str: exec(stripped)),
