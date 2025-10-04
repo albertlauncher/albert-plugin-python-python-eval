@@ -22,6 +22,38 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         TriggerQueryHandler.__init__(self)
         self.iconUrls = [f"file:{Path(__file__).parent}/python.svg"]
 
+        self._modules = self.readConfig('modules', str)
+        if self._modules:
+            self._load_modules()
+        else:
+            self._modules = ""
+
+    def _load_modules(self):
+        for mod in [m.strip() for m in self._modules.split(',') if m.strip()]:
+            try:
+                globals().update(vars(__import__(mod)))
+            except ImportError as ex:
+                warning(f"Failed to import module '{mod}': {ex}")
+
+    @property
+    def modules(self):
+        return self._modules
+
+    @modules.setter
+    def modules(self, value):
+        self._modules = value
+        self.writeConfig('modules', value)
+        self._load_modules()
+
+    def configWidget(self):
+        return [
+            {
+                'type': 'lineedit',
+                'property': 'modules',
+                'label': 'Load modules'
+            }
+        ]
+
     def synopsis(self, query):
         return "<Python expression>"
 
