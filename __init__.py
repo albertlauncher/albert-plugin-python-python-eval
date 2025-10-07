@@ -75,7 +75,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 id=self.id(),
                 text=result_str,
                 subtext=type(result).__name__,
-                inputActionText=query.trigger + result_str,
+                inputActionText=result_str,
                 iconFactory=lambda: makeImageIcon(Plugin.icon),
                 actions = [
                     Action("copy", "Copy result to clipboard", lambda r=result_str: setClipboardText(r)),
