@@ -6,7 +6,7 @@ from pathlib import Path
 from albert import *
 
 md_iid = "4.0"
-md_version = "2.1"
+md_version = "2.2.0"
 md_name = "Python Eval"
 md_description = "Evaluate Python code"
 md_license = "BSD-3"
