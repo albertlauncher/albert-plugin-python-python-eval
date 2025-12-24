@@ -5,7 +5,7 @@ from pathlib import Path
 
 from albert import *
 
-md_iid = "4.0"
+md_iid = "5.0"
 md_version = "2.2.0"
 md_name = "Python Eval"
 md_description = "Evaluate Python code"
@@ -15,13 +15,13 @@ md_authors = ["@ManuelSchneid3r"]
 md_maintainers = ["@ManuelSchneid3r"]
 
 
-class Plugin(PluginInstance, ThreadedQueryHandler):
+class Plugin(PluginInstance, GeneratorQueryHandler):
 
     icon = Path(__file__).parent / "python.svg"
 
     def __init__(self):
         PluginInstance.__init__(self)
-        ThreadedQueryHandler.__init__(self)
+        GeneratorQueryHandler.__init__(self)
 
         self._modules = self.readConfig('modules', str)
         if self._modules:
@@ -61,24 +61,26 @@ class Plugin(PluginInstance, ThreadedQueryHandler):
     def defaultTrigger(self):
         return "py "
 
-    def handleThreadedQuery(self, query):
-        stripped = query.string.strip()
-        if stripped:
+    def items(self, ctx):
+        query = ctx.query.strip()
+        if query:
             try:
-                result = eval(stripped)
+                result = eval(query)
             except Exception as ex:
                 result = ex
 
             result_str = str(result)
 
-            query.add(StandardItem(
-                id=self.id(),
-                text=result_str,
-                subtext=type(result).__name__,
-                input_action_text=result_str,
-                icon_factory=lambda: makeImageIcon(Plugin.icon),
-                actions = [
-                    Action("copy", "Copy result to clipboard", lambda r=result_str: setClipboardText(r)),
-                    Action("exec", "Execute python code", lambda r=result_str: exec(stripped)),
-                ]
-            ))
+            yield [
+                StandardItem(
+                    id=self.id(),
+                    text=result_str,
+                    subtext=type(result).__name__,
+                    input_action_text=result_str,
+                    icon_factory=lambda: makeImageIcon(Plugin.icon),
+                    actions = [
+                        Action("copy", "Copy result to clipboard", lambda r=result_str: setClipboardText(r)),
+                        Action("exec", "Execute python code", lambda r=result_str: exec(query)),
+                    ]
+                )
+            ]
