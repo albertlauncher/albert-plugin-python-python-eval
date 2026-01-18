@@ -77,7 +77,7 @@ class Plugin(PluginInstance, GeneratorQueryHandler):
                     text=result_str,
                     subtext=type(result).__name__,
                     input_action_text=result_str,
-                    icon_factory=lambda: makeImageIcon(Plugin.icon),
+                    icon_factory=lambda: Icon.image(Plugin.icon),
                     actions = [
                         Action("copy", "Copy result to clipboard", lambda r=result_str: setClipboardText(r)),
                         Action("exec", "Execute python code", lambda r=result_str: exec(query)),
